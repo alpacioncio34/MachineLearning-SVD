@@ -43,6 +43,14 @@ lat = coord["lat"]
 
 # YOUR PART
 # Normalise the data to z scores and save as X
+data = np.array(climate)
+mean = np.mean(data,axis=0)
+
+std_dev = np.std(data,axis=0)
+
+epsilon = 1e-8
+z_scores = (data-mean)/(std_dev+epsilon)
+X = pd.DataFrame(z_scores)
 
 # %%
 # Plotting
