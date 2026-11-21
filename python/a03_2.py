@@ -56,7 +56,7 @@ plt.show()
 U,s,Vt = svd(X)
 # The rank of our data is the number of singular values s has
 print(s) # There are no 0 values so len(s) is the rank
-print(f"Our data has rank {s}")
+print(f"Our data has rank {len(s)}")
 # Interpretation of the rank:
 '''
     // TODO: Check the rightness of this statement
