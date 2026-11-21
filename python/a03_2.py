@@ -76,6 +76,11 @@ plot_xy(lon, lat, U[:, 0])
 # For interpretation, it may also help to look at the other component matrices and
 # perhaps use other plot functions (e.g., plot_matrix).
 # YOUR PART
+plot_xy(lon, lat, U[:, 0])
+plot_xy(lon, lat, U[:, 1])
+plot_xy(lon, lat, U[:, 2])
+plot_xy(lon, lat, U[:, 3])
+plot_xy(lon, lat, U[:, 4])
 
 # %% [markdown]
 # ## 2d
