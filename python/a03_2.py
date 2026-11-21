@@ -53,8 +53,18 @@ plt.show()
 # %%
 # Compute the SVD of the normalized climate data and store it in variables U,s,Vt. What
 # is the rank of the data?
-# YOUR PART
-
+U,s,Vt = svd(X)
+# The rank of our data is the number of singular values s has
+print(s) # There are no 0 values so len(s) is the rank
+print(f"Our data has rank {s}")
+# Interpretation of the rank:
+'''
+    // TODO: Check the rightness of this statement
+    The rank of the data corresponds to the number, this represents
+    the importance of each entry in the normalized data, since
+    singular values that asre higher are the ones that are the
+    most improtant
+'''
 # %% [markdown]
 # ## 2c
 
