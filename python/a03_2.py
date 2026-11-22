@@ -88,6 +88,9 @@ plot_xy(lon, lat, U[:, 4])
 # %%
 # Here is an example.
 plot_xy(U[:, 0], U[:, 1], lat - np.mean(lat))
+plot_xy(U[:, 0], U[:, 2], lat - np.mean(lat))
+plot_xy(U[:, 1], U[:, 2], lat - np.mean(lat))
+plot_xy(U[:, 2], U[:, 3], lat - np.mean(lat))
 
 # %% [markdown]
 # ## 2e
