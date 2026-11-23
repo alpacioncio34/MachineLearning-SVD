@@ -53,18 +53,12 @@ plt.show()
 # %%
 # Compute the SVD of the normalized climate data and store it in variables U,s,Vt. What
 # is the rank of the data?
-U,s,Vt = svd(X)
-# The rank of our data is the number of singular values s has
-print(s) # There are no 0 values so len(s) is the rank
-print(f"Our data has rank {len(s)}")
-# Interpretation of the rank:
-'''
-    // TODO: Check the rightness of this statement
-    The rank of the data corresponds to the number, this represents
-    the importance of each entry in the normalized data, since
-    singular values that asre higher are the ones that are the
-    most improtant
-'''
+# %%
+U, s, Vt = svd(X)
+# Numerical rank based on a tolerance threshold
+threshold = 1e-10 * s[0]
+Z_rank = np.sum(s > threshold)
+print(f"Our data has rank {Z_rank}")
 # %% [markdown]
 # ## 2c
 
@@ -113,16 +107,9 @@ print(Z)
 # %%
 # 2e(ii) 90% squared Frobenius norm
 # YOUR PART
-frob_norm = sum(x**2 for x in s)
-
-def calculate_squares(Z,s):
-    return sum([s[i]**2 for i in range(Z)])
-
-i = len(s) - 1
-while i >=0 and frob_norm*0.9 < calculate_squares(i,s):
-    i -= 1
-
-Z = i + 1
+frob_norm_sq = np.sum(s**2)
+cum_energy = np.cumsum(s**2) / frob_norm_sq
+Z = np.argmax(cum_energy >= 0.9) + 1
 print(Z)
 
 # %%
@@ -153,38 +140,22 @@ plt.show()
 # %%
 # 2e(iv) entropy
 # YOUR PART
-denominator = sum([x**2 for x in s])
+p = s**2 / np.sum(s**2)
+p = p[p > 0]  # Prevent log(0)
+E = -np.sum(p * np.log(p))
 
-def relative_contribution(sigma_k):
-    return sigma_k**2/denominator
-
-# We define the normalized entropy
-E = sum(relative_contribution(x)*np.log(1/relative_contribution(x))
-        for x in s)
-
-print(f"Normalized entropy: {E}")
-
-Z=800000
-# Choosing smallest Z:
-for i in range(len(s)):
-    value = 0
-    for j in range(i):
-        value+=relative_contribution(s[j])
-    if value >= E:
-        Z = i
-        break
-    else:
-        value = 0
-
+print(f"Normalized/Shannon entropy: {E}")
+# Effective dimension / Z based on entropy (perplexity)
+Z = int(np.ceil(np.exp(E)))
 print(Z)
 
 # %%
 # 2e(v) random flips
 # Random sign matrix: np.random.choice([-1,1], X.shape)
 # YOUR PART
-Xhat = X * np.random.choice([-1,1], X.shape)
-
-print(Xhat)
+rand_s = np.array([np.linalg.svd(X * np.random.choice([-1, 1], X.shape), compute_uv=False) for _ in range(100)])
+Z = np.sum(s > np.percentile(rand_s, 95, axis=0))
+print(Z)
 
 # %% [markdown]
 # ## 2f
