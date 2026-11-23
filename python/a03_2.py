@@ -98,6 +98,17 @@ plot_xy(U[:, 2], U[:, 3], lat - np.mean(lat))
 # %%
 # 2e(i) Guttman-Kaiser
 # YOUR PART
+def k_th_variance(sigma,N):
+    return sigma**2/(N-1)
+
+# Select largest Z such that the variance >1 for all k <=Z
+i = len(s) - 1
+while i >= 0 and k_th_variance(s[i], N=X.shape[0]) <= 1:
+    i -= 1
+
+Z = i + 1
+print(Z)
+
 
 # %%
 # 2e(ii) 90% squared Frobenius norm
