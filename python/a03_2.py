@@ -153,11 +153,38 @@ plt.show()
 # %%
 # 2e(iv) entropy
 # YOUR PART
+denominator = sum([x**2 for x in s])
+
+def relative_contribution(sigma_k):
+    return sigma_k**2/denominator
+
+# We define the normalized entropy
+E = sum(relative_contribution(x)*np.log(1/relative_contribution(x))
+        for x in s)
+
+print(f"Normalized entropy: {E}")
+
+Z=800000
+# Choosing smallest Z:
+for i in range(len(s)):
+    value = 0
+    for j in range(i):
+        value+=relative_contribution(s[j])
+    if value >= E:
+        Z = i
+        break
+    else:
+        value = 0
+
+print(Z)
 
 # %%
 # 2e(v) random flips
 # Random sign matrix: np.random.choice([-1,1], X.shape)
 # YOUR PART
+Xhat = X * np.random.choice([-1,1], X.shape)
+
+print(Xhat)
 
 # %% [markdown]
 # ## 2f
