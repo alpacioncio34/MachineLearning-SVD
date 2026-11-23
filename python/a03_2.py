@@ -113,10 +113,22 @@ print(Z)
 # %%
 # 2e(ii) 90% squared Frobenius norm
 # YOUR PART
+frob_norm = sum(x**2 for x in s)
+
+def calculate_squares(Z,s):
+    return sum([s[i]**2 for i in range(Z)])
+
+i = len(s) - 1
+while i >=0 and frob_norm*0.9 < calculate_squares(i,s):
+    i -= 1
+
+Z = i + 1
+print(Z)
 
 # %%
 # 2e(iii) Scree test
 # YOUR PART
+
 
 # %%
 # 2e(iv) entropy
