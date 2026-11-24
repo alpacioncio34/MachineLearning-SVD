@@ -164,7 +164,26 @@ print(Z)
 # Here is the empty plot that you need to fill (one line per choice of Z: RSME between
 # original X and the reconstruction from size-Z SVD of noisy versions)
 # YOUR PART
-nextplot()
-plt.plot()
+epsilons = np.linspace(0, 2, 15)
+for Z in [1, 2, 5, 10, 48]:
+  errs = [
+      np.linalg.norm(
+          X
+          - (
+              lambda n: (U := np.linalg.svd(n, full_matrices=False))[0][:, :Z]
+              * U[1][:Z]
+              @ U[2][:Z, :]
+          )(X + np.random.randn(*X.shape) * eps),
+          "fro",
+      )
+      / np.sqrt(X.size)
+      for eps in epsilons
+  ]
+  plt.plot(epsilons, errs, label=f"Z={Z}")
+
 plt.xlabel(r"Noise level ($\epsilon$)")
-plt.ylabel("Reconstruction RMSE vs. original data")
+plt.ylabel("RMSE")
+plt.legend()
+plt.show()
+
+# %%
