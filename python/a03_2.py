@@ -164,26 +164,32 @@ print(Z)
 # Here is the empty plot that you need to fill (one line per choice of Z: RSME between
 # original X and the reconstruction from size-Z SVD of noisy versions)
 # YOUR PART
-epsilons = np.linspace(0, 2, 15)
-for Z in [1, 2, 5, 10, 48]:
-  errs = [
-      np.linalg.norm(
-          X
-          - (
-              lambda n: (U := np.linalg.svd(n, full_matrices=False))[0][:, :Z]
-              * U[1][:Z]
-              @ U[2][:Z, :]
-          )(X + np.random.randn(*X.shape) * eps),
-          "fro",
-      )
-      / np.sqrt(X.size)
-      for eps in epsilons
-  ]
-  plt.plot(epsilons, errs, label=f"Z={Z}")
+# Assuming X is your N x D normalized climate data matrix
+epsilons = np.linspace(0, 2, 20)
+possible_Z = [1, 2, 5, 10, 48]
+
+# Store RMSE results for each Z
+rmse_results = {Z: [] for Z in possible_Z}
+
+for eps in epsilons:
+  X_noise = X + np.random.randn(*X.shape) * eps
+  U, S, Vt = np.linalg.svd(X_noise, full_matrices=False)
+
+  for Z in possible_Z:
+    X_hat = U[:, :Z] * S[:Z] @ Vt[:Z, :]
+    rmse = np.linalg.norm(X - X_hat, "fro") / np.sqrt(X.size)
+    rmse_results[Z].append(rmse)
+
+# Plotting
+plt.figure(figsize=(8, 5))
+for Z in possible_Z:
+  plt.plot(epsilons, rmse_results[Z], marker="o", label=f"Z = {Z}")
 
 plt.xlabel(r"Noise level ($\epsilon$)")
-plt.ylabel("RMSE")
+plt.ylabel("Reconstruction RMSE")
+plt.title("RMSE vs Noise Level for Various Ranks Z")
 plt.legend()
+plt.grid(True, alpha=0.3)
 plt.show()
 
 # %%
